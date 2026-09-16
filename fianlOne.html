@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Last Page</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500&family=Caveat:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --midnight: #08090D;
+            --navy: #0D111C;
+            --charcoal: #151821;
+            --ivory: #F2EEE7;
+            --muted-gray: #A6A3A0;
+            --dusty-rose: #C4968F;
+            --warm-gold: #D4AF37;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--midnight);
+            color: var(--ivory);
+            line-height: 1.8;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(196, 150, 143, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(13, 17, 28, 0.4) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .grain {
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            opacity: 0.4;
+            z-index: 1;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            opacity: 0;
+            animation: fadeInHero 2s ease-out forwards;
+        }
+
+        @keyframes fadeInHero {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .hero-photo-container {
+            width: 280px;
+            height: 280px;
+            margin-bottom: 3rem;
+            position: relative;
+            opacity: 0;
+            animation: fadeInPhoto 1.5s ease-out 0.5s forwards;
+        }
+
+        @keyframes fadeInPhoto {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .hero-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+            filter: grayscale(20%) contrast(0.9) brightness(0.85);
+            box-shadow: 
+                0 0 0 1px rgba(242, 238, 231, 0.1),
+                0 20px 60px rgba(0, 0, 0, 0.6),
+                inset 0 0 100px rgba(0, 0, 0, 0.2);
+        }
+
+        .hero-photo-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--charcoal) 0%, var(--navy) 100%);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.2rem;
+            color: var(--muted-gray);
+            box-shadow: 
+                0 0 0 1px rgba(242, 238, 231, 0.1),
+                0 20px 60px rgba(0, 0, 0, 0.6);
+        }
+
+        .hero-text {
+            text-align: center;
+            max-width: 800px;
+        }
+
+        .hero-opening {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            font-weight: 400;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+            opacity: 0;
+            animation: fadeInText 1.5s ease-out 1s forwards;
+        }
+
+        .hero-subtext {
+            font-size: 0.95rem;
+            color: var(--muted-gray);
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            opacity: 0;
+            animation: fadeInText 1.5s ease-out 1.5s forwards;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            font-size: 0.85rem;
+            color: var(--muted-gray);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0;
+            animation: fadeInText 1.5s ease-out 2s forwards, float 3s ease-in-out infinite;
+        }
+
+        @keyframes fadeInText {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .scroll-arrow {
+            font-size: 1.5rem;
+        }
+
+        /* Section Styles */
+        section {
+            min-height: 100vh;
+            padding: 6rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .section-content {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 400;
+            margin-bottom: 2rem;
+            text-align: center;
+            letter-spacing: 2px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease-out;
+        }
+
+        .section-title.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--muted-gray);
+            margin-bottom: 4rem;
+            line-height: 1.8;
+            font-weight: 300;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease-out 0.2s;
+        }
+
+        .section-subtitle.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Story Chapter Styles */
+        .story-chapter {
+            margin-bottom: 6rem;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s ease-out;
+        }
+
+        .story-chapter.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .chapter-number {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem;
+            color: var(--dusty-rose);
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .chapter-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.6rem, 3vw, 2.2rem);
+            margin-bottom: 2rem;
+            font-weight: 500;
+            line-height: 1.3;
+        }
+
+        .chapter-text {
+            font-size: 1.05rem;
+            line-height: 2;
+            color: var(--ivory);
+            margin-bottom: 1.5rem;
+            font-weight: 300;
+        }
+
+        .chapter-text strong {
+            color: var(--dusty-rose);
+            font-weight: 500;
+        }
+
+        /* Centerpiece Text */
+        .centerpiece {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .centerpiece-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2rem, 5vw, 4rem);
+            line-height: 1.4;
+            font-weight: 400;
+            max-width: 900px;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 1.5s ease-out;
+        }
+
+        .centerpiece-text.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .centerpiece-highlight {
+            display: block;
+            margin-top: 2rem;
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            color: var(--dusty-rose);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s ease-out 0.5s;
+        }
+
+        .centerpiece-text.visible .centerpiece-highlight {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Timeline */
+        .timeline {
+            padding: 4rem 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .timeline-item {
+            margin-bottom: 2.5rem;
+            padding-left: 2.5rem;
+            position: relative;
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            width: 8px;
+            height: 8px;
+            background: var(--dusty-rose);
+            border-radius: 50%;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 3.5px;
+            top: 1.2rem;
+            width: 1px;
+            height: calc(100% + 1rem);
+            background: linear-gradient(to bottom, var(--dusty-rose), transparent);
+        }
+
+        .timeline-item:last-child::after {
+            display: none;
+        }
+
+        .timeline-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            color: var(--ivory);
+            line-height: 1.6;
+        }
+
+        .timeline-final {
+            margin-top: 4rem;
+            text-align: center;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            color: var(--dusty-rose);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s ease-out;
+        }
+
+        .timeline-final.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Goodbye Sequence */
+        .goodbye-sequence {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .goodbye-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            text-align: center;
+            line-height: 1.3;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1.2s ease-out;
+        }
+
+        .goodbye-text.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Archive Section */
+        .archive-intro {
+            text-align: center;
+            margin-bottom: 4rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .archive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+            padding: 2rem 0;
+        }
+
+        .archive-card {
+            background: rgba(21, 24, 33, 0.6);
+            border: 1px solid rgba(242, 238, 231, 0.1);
+            padding: 2rem;
+            border-radius: 4px;
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .archive-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .archive-card:hover {
+            border-color: rgba(196, 150, 143, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .archive-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--charcoal) 0%, var(--navy) 100%);
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted-gray);
+            font-size: 0.9rem;
+            overflow: hidden;
+        }
+
+        .archive-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .archive-chapter {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.85rem;
+            color: var(--dusty-rose);
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .archive-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .archive-description {
+            font-size: 0.95rem;
+            color: var(--muted-gray);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .archive-qr {
+            width: 120px;
+            height: 120px;
+            background: white;
+            margin: 1.5rem auto;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: #333;
+            padding: 0.5rem;
+        }
+
+        .archive-link {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: rgba(196, 150, 143, 0.1);
+            border: 1px solid rgba(196, 150, 143, 0.3);
+            color: var(--dusty-rose);
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .archive-link:hover {
+            background: rgba(196, 150, 143, 0.2);
+            border-color: var(--dusty-rose);
+        }
+
+        /* Final Screen */
+        .final-screen {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .final-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInFinal 2s ease-out forwards;
+        }
+
+        @keyframes fadeInFinal {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .final-subtext {
+            font-size: 1rem;
+            color: var(--muted-gray);
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeInFinal 2s ease-out 1s forwards;
+        }
+
+        .final-goodbye {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            color: var(--dusty-rose);
+            opacity: 0;
+            animation: fadeInFinal 2s ease-out 2s forwards;
+        }
+
+        .read-again {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 1px solid rgba(242, 238, 231, 0.2);
+            color: var(--muted-gray);
+            font-size: 0.85rem;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInFinal 2s ease-out 3s forwards;
+        }
+
+        .read-again:hover {
+            border-color: var(--dusty-rose);
+            color: var(--dusty-rose);
+        }
+
+        /* Music Player */
+        .music-player {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            z-index: 1000;
+            padding: 0.75rem 1.25rem;
+            background: rgba(21, 24, 33, 0.9);
+            border: 1px solid rgba(242, 238, 231, 0.2);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            color: var(--muted-gray);
+            backdrop-filter: blur(10px);
+        }
+
+        .music-player:hover {
+            border-color: var(--dusty-rose);
+            color: var(--dusty-rose);
+        }
+
+        .music-player.playing {
+            color: var(--dusty-rose);
+            border-color: var(--dusty-rose);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            section {
+                padding: 4rem 1.5rem;
+            }
+
+            .hero-photo-container {
+                width: 220px;
+                height: 220px;
+            }
+
+            .story-chapter {
+                margin-bottom: 4rem;
+            }
+
+            .chapter-text {
+                font-size: 1rem;
+            }
+
+            .archive-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .music-player {
+                bottom: 1rem;
+                left: 1rem;
+                font-size: 0.8rem;
+                padding: 0.6rem 1rem;
+            }
+
+            .read-again {
+                bottom: 1rem;
+                right: 1rem;
+                font-size: 0.75rem;
+            }
+        }
+
+        /* Peaceful glow effect */
+        .peaceful-glow {
+            position: relative;
+        }
+
+        .peaceful-glow::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(196, 150, 143, 0.08) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Handwritten style for special moments */
+        .handwritten {
+            font-family: 'Caveat', cursive;
+            font-size: 1.3em;
+            color: var(--dusty-rose);
+        }
+    </style>
+</head>
+<body>
+    <div class="grain"></div>
+    
+    <div class="content-wrapper">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-photo-container">
+                <div class="hero-photo-placeholder"><img src="photo/bfbc774e-bd74-41a0-b806-ae77467077a5.jpg" alt="Hero" class="hero-photo">
+                 </div>
+                 <!-- Replace the div above with this when you have the photo:
+                <img src="/images/hero.jpg" alt="Hero" class="hero-photo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="hero-photo-placeholder" style="display: none;">[ Photo Not Found ]</div>
+                 -->
+            </div>
+            
+            <div class="hero-text">
+                <h1 class="hero-opening">So, you finally broke this lover boy of yours?</h1>
+                <p class="hero-subtext">Yeah… you did.</p>
+            </div>
+            
+            <div class="scroll-indicator">
+                <span>Open the last page</span>
+                <span class="scroll-arrow">↓</span>
+            </div>
+        </section>
+
+        <!-- The Last Page Intro -->
+        <section id="intro">
+            <div class="section-content">
+                <h2 class="section-title">THE LAST PAGE</h2>
+                <p class="section-subtitle">
+                    Some stories don't end because the love disappears.<br>
+                    Sometimes they end because one person has to finally let go.
+                </p>
+            </div>
+        </section>
+
+        <!-- Chapter 01: What Was My Fault? -->
+        <section>
+            <div class="section-content">
+                <div class="story-chapter">
+                    <div class="chapter-number">01</div>
+                    <h3 class="chapter-title">What Was My Fault?</h3>
+                    <p class="chapter-text">
+                        You didn't just break me once. You broke me, fixed me, broke me again, and then, somehow, you replaced me with someone who doesn't even know how to care for you the way I did.
+                    </p>
+                    <p class="chapter-text">
+                        And sometimes I still ask myself, what was my fault? Loving you too hard? Caring about you too much? Making sure you were safe, even when I wasn't? Trying every day to make you believe that you were beautiful, that you were worthy, that you were never something to be ashamed of?
+                    </p>
+                    <p class="chapter-text">
+                        I spent so much of myself trying to kill the insecurities you carried. I broke friendships with people close to me because I was scared of ever becoming disloyal to you. I didn't want to become the kind of person who could hurt the girl he loved.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chapter 02: Things You Never Asked For -->
+        <section>
+            <div class="section-content">
+                <div class="story-chapter">
+                    <div class="chapter-number">02</div>
+                    <h3 class="chapter-title">Things You Never Asked For</h3>
+                    <p class="chapter-text">
+                        There are so many things you never even asked me to do. I did them because I loved you.
+                    </p>
+                    <p class="chapter-text">
+                        Everyone at home knows how badly I struggle with the heat, how Saim can barely sleep without the AC, but I sacrificed my comfort and my sleep just to stay with you.
+                    </p>
+                    <p class="chapter-text">
+                        I worked until I was exhausted because I dreamed of giving my future wife, Anika, and the little Musa I once imagined, a beautiful life.
+                    </p>
+                    <p class="chapter-text">
+                        I stopped going out with my family when I felt they had disrespected you. I removed girls from my life because I wanted you to feel secure with me. I wanted you to wake up every day knowing, <span class="handwritten">"My husband is not going anywhere."</span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chapter 03: In Your Heart -->
+        <section>
+            <div class="section-content">
+                <div class="story-chapter">
+                    <div class="chapter-number">03</div>
+                    <h3 class="chapter-title">In Your Heart</h3>
+                    <p class="chapter-text">
+                        I even went for Umrah with you in my heart. I made dua for you. I prayed for you when I felt like I had nothing left.
+                    </p>
+                    <p class="chapter-text">
+                        I searched for movies just so we could have another little moment together. I played games with you even when I had work waiting for me, and then sacrificed my sleep to finish that work afterward.
+                    </p>
+                    <p class="chapter-text">
+                        I kept your streaks, found gifts in Adopt Me, and did stupid little things just to make you smile and show you, <span class="handwritten">"Your hubby is enough."</span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chapter 04: I Wanted You To See Yourself -->
+        <section>
+            <div class="section-content">
+                <div class="story-chapter">
+                    <div class="chapter-number">04</div>
+                    <h3 class="chapter-title">I Wanted You To See Yourself Through My Eyes</h3>
+                    <p class="chapter-text">
+                        I spent so much time trying to make you feel beautiful. I knew about the insecurities you carried, even the ones you tried to hide.
+                    </p>
+                    <p class="chapter-text">
+                        I remember knowing that at your childhood sometimes you wanted to hide your face because you didn't feel beautiful enough, and honestly, that broke something inside me.
+                    </p>
+                    <p class="chapter-text">
+                        I wanted to spend my life proving the opposite to you.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Centerpiece -->
+        <section class="centerpiece">
+            <div class="centerpiece-text">
+                I wanted you to look at yourself through my eyes for once.
+            </div>
+        </section>
+
+        <!-- More Story -->
+        <section>
+            <div class="section-content">
+                <div class="story-chapter">
+                    <p class="chapter-text">
+                        And even when it came to intimacy, I never saw you as something ordinary. To me, your beauty was something special because you were <em>my</em> Anika.
+                    </p>
+                    <p class="chapter-text">
+                        When you told me about the things you felt insecure about, I wanted to make those insecurities disappear. I wanted you to know that the person I loved could never be someone I would make feel ashamed of herself.
+                    </p>
+                    <p class="chapter-text">
+                        And for all of this, I even started learning things I had never cared about before. I learned about periods because I wanted to know what to do when you were in pain. I wanted to be the person you could depend on even when you couldn't explain what you needed.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chapter 05: And After Everything -->
+        <section class="centerpiece">
+            <div class="centerpiece-text">
+                And after everything…
+                <span class="centerpiece-highlight">I still wasn't enough.</span>
+            </div>
+        </section>
+
+        <!-- The Pain -->
+        <section>
+            <div class="section-content">
+                <div class="story-chapter">
+                    <p class="chapter-text">
+                        That is the part that hurts the most.
+                    </p>
+                    <p class="chapter-text">
+                        Not losing you. Not even being replaced. It's knowing that after everything I gave, you chose to hurt the same person who spent so much time trying to protect your heart.
+                    </p>
+                    <p class="chapter-text">
+                        Maybe the person you chose now will love you. Maybe he will make you happy. I genuinely hope he does. But I know he doesn't know all the little things I knew. He doesn't know every insecurity, every fear, every little thing that could make you smile.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chapter 06: The Things I Gave -->
+        <section>
+            <div class="section-content">
+                <h2 class="section-title">The Things I Gave</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-text">Sleep.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-text">Comfort.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-text">Time.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-text">Friendships.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-text">Work.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-text">Money.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-text">Plans.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-text">Duas.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-text">Memories.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-text">Hope.</div>
+                    </div>
+                    
+                    <div class="timeline-final">
+                        But I don't regret loving you.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chapter 07: The Last Attempt -->
+        <section>
+            <div class="section-content">
+                <div class="story-chapter">
+                    <div class="chapter-number">07</div>
+                    <h3 class="chapter-title">One Last Attempt</h3>
+                    <p class="chapter-text">
+                        I even sold my laptop and my gold because I wanted to meet you in Saudi and try one last time to fix everything between us.
+                    </p>
+                    <p class="chapter-text">
+                        I was willing to sacrifice things I owned just for one more chance to make things right.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Realization -->
+        <section class="centerpiece">
+            <div class="centerpiece-text">
+                But maybe some things cannot be fixed by one person.
+            </div>
+        </section>
+
+        <!-- Chapter 08: Acceptance -->
+        <section>
+            <div class="section-content">
+                <div class="story-chapter">
+                    <div class="chapter-number">08</div>
+                    <h3 class="chapter-title">Maybe I Have To Accept That</h3>
+                    <p class="chapter-text">
+                        I spent so much of my life wanting to give my Anika the whole world. But honestly, it was never really about money, gifts, marriage, or anything material.
+                    </p>
+                    <p class="chapter-text">
+                        I just wanted to give you the love I felt you had been missing. I wanted to make you feel safe. I wanted to make you feel beautiful. I wanted you to know that there was at least one person in this world who would look at you and say, "You are enough."
+                    </p>
+                    <p class="chapter-text">
+                        Maybe I was foolish for believing I could love someone enough to heal every wound they carried.
+                    </p>
+                </div>
+
+                <div class="timeline" style="max-width: 500px; margin-top: 4rem;">
+                    <div class="timeline-item">
+                        <div class="timeline-text" style="font-size: 1.1rem;">I don't regret the sacrifices.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-text" style="font-size: 1.1rem;">I don't regret the duas.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-text" style="font-size: 1.1rem;">I don't regret the sleepless nights.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-text" style="font-size: 1.1rem;">I don't regret the games, the movies, the gifts.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-text" style="font-size: 1.1rem;">I don't regret the calls, the websites.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-text" style="font-size: 1.1rem;">I don't regret the little messages.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-text" style="font-size: 1.1rem;">I don't regret any of the memories.</div>
+                    </div>
+                    
+                    <div class="timeline-final" style="margin-top: 3rem; font-size: 2rem;">
+                        I don't regret loving you.
+                    </div>
+                </div>
+
+                <div class="story-chapter" style="margin-top: 4rem;">
+                    <p class="chapter-text">
+                        If I ever did something good for you, I hope Allah accepts it. And if I ever hurt you, intentionally or unintentionally, I hope you can forgive me.
+                    </p>
+                    <p class="chapter-text">
+                        Wallahi, my dream was never to hurt you. My dream was to give the whole world to my Anika, my jaanu, my heart, my everything.
+                    </p>
+                    <p class="chapter-text">
+                        But sometimes loving someone also means accepting that you cannot keep holding them when they have already chosen to let go.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chapter 09: The Goodbye -->
+        <section class="goodbye-sequence">
+            <div class="goodbye-text">So yes…</div>
+        </section>
+
+        <section class="goodbye-sequence">
+            <div class="goodbye-text">I'm leaving.</div>
+        </section>
+
+        <section class="goodbye-sequence">
+            <div class="goodbye-text">Not because I stopped loving you.</div>
+        </section>
+
+        <section class="goodbye-sequence">
+            <div class="goodbye-text">I'm leaving because I loved you.</div>
+        </section>
+
+        <!-- Moving Forward -->
+        <section>
+            <div class="section-content">
+                <div class="story-chapter">
+                    <p class="chapter-text">
+                        I'll disappear from your life, and I'll keep making dua and giving charity for your sake for as long as my heart allows me to.
+                    </p>
+                    <p class="chapter-text">
+                        And one day, when I hear that you have found your happiness and built your life with someone else, I'll accept it. Maybe then I'll find someone too, and maybe Allah will write something different for me.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chapter 10: Allah Hafiz -->
+        <section class="peaceful-glow" style="min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+            <div class="section-content" style="text-align: center;">
+                <p class="chapter-text" style="font-size: 1.2rem; margin-bottom: 2rem;">
+                    I don't know what the future holds.
+                </p>
+                <p class="chapter-text" style="font-size: 1.3rem; margin-bottom: 3rem; line-height: 2.2;">
+                    I only know that once upon a time,<br>
+                    there was a boy who loved a girl<br>
+                    with everything he had.
+                </p>
+                <p class="chapter-text" style="font-size: 1.2rem; margin-bottom: 4rem;">
+                    And this is the last page of his story with her.
+                </p>
+                
+                <h2 style="font-family: 'Cormorant Garamond', serif; font-size: clamp(2.5rem, 5vw, 4rem); color: var(--dusty-rose); margin-bottom: 2rem;">
+                    Allah Hafiz, Anika.
+                </h2>
+                
+                <p class="chapter-text" style="font-size: 1.3rem; line-height: 2;">
+                    I loved you.<br><br>
+                    And a part of me probably always will.
+                </p>
+            </div>
+        </section>
+
+        <!-- Chapter 11: The Archive -->
+        <section id="archive" style="min-height: auto; padding: 8rem 2rem;">
+            <div class="section-content">
+                <h2 class="section-title">THE LITTLE WORLDS I LEFT BEHIND</h2>
+                
+                <div class="archive-intro">
+                    <p class="section-subtitle">
+                        And those little websites at the end?<br><br>
+                        They're probably useless now.
+                    </p>
+                    <p class="chapter-text" style="text-align: center; margin-top: 2rem;">
+                        But I made every one of them because I wanted you to feel beautiful.<br>
+                        I wanted you to feel loved.<br>
+                        I wanted to preserve the little world we had, even if that world didn't last forever.
+                    </p>
+                </div>
+
+                <div class="archive-grid">
+                    <!-- Archive Card 1 -->
+                    <div class="archive-card">
+                        <div class="archive-image">
+                            <!-- <span>Preview Image</span>
+                            <img src="photo/for my peace-zYS55p.png" alt="Website 01"> -->
+                        </div>
+                        <div class="archive-chapter">CHAPTER 01</div>
+                        <h3 class="archive-title">The First Hello</h3>
+                        <p class="archive-description">
+                            The website I made for you. Whenever everything felt new and magical.
+                        </p>
+                        <div class="archive-qr">
+                            <!-- <span>QR Code<br>Website 01</span> -->
+                            <!-- Replace with actual QR code generator pointing to WEBSITE_01_URL -->
+                        </div>
+                        <a href="https://ashfaksaim09-svg.github.io/only-you-anika/
+" class="archive-link" target="_blank">Open Memory →</a>
+                    </div>
+
+                    <!-- Archive Card 2 -->
+                    <div class="archive-card">
+                        <div class="archive-image">
+                            <!-- <span>Preview Image</span> -->
+                            <!-- <img src="/images/website-02.jpg" alt="Website 02"> -->
+                        </div>
+                        <div class="archive-chapter">CHAPTER 02</div>
+                        <h3 class="archive-title">Our Little Universe</h3>
+                        <p class="archive-description">
+                            
+                        </p>
+                        <div class="archive-qr">
+                            <span><br></span>
+                        </div>
+                        <a href=" https://ashfaksaim09-svg.github.io/FOREVER-WIFE/
+" class="archive-link" target="_blank">Open Memory →</a>
+                    </div>
+
+                    <!-- Archive Card 3 -->
+                    <div class="archive-card">
+                        <div class="archive-image">
+                            <!-- <span>Preview Image</span> -->
+                            <!-- <img src="/images/website-03.jpg" alt="Website 03"> -->
+                        </div>
+                        <div class="archive-chapter">CHAPTER 03</div>
+                        <h3 class="archive-title">Beautiful You</h3>
+                        <p class="archive-description">
+                            The one where I tried to show you how beautiful you were to me.
+                        </p>
+                        <div class="archive-qr">
+                            <span><br></span>
+                        </div>
+                        <a href=" https://ashfaksaim09-svg.github.io/MY-ANIKA-1/
+" class="archive-link" target="_blank">Open Memory →</a>
+                    </div>
+                </div>
+
+                <div class="archive-intro" style="margin-top: 6rem;">
+                    <h3 class="chapter-title" style="text-align: center; margin-bottom: 2rem;">
+                        If You Ever Want To Visit The Memories Again
+                    </h3>
+                    <p class="chapter-text" style="text-align: center; color: var(--muted-gray);">
+                        Keep them if you want.
+                    </p>
+                    <p class="chapter-text" style="text-align: center; margin-top: 2rem; font-family: 'Cormorant Garamond', serif; font-size: 1.3rem;">
+                        They are pieces of a version of me<br>
+                        that loved you more than he knew how to explain.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Screen -->
+        <section class="final-screen">
+            <div class="final-text">THE END</div>
+            <div class="final-subtext">or maybe just the end of this chapter.</div>
+            <div class="final-goodbye">Allah Hafiz, Anika.</div>
+            
+            <button class="read-again" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                Read again
+            </button>
+        </section>
+    </div>
+
+    <!-- Music Player -->
+    <div class="music-player" id="musicPlayer">
+        <span id="musicStatus">♫ Music off</span>
+    </div>
+
+    <!-- Audio element (hidden) -->
+    <audio id="backgroundMusic" loop>
+        <source src="/music.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Scroll reveal animation
+        const observerOptions = {
+            threshold: 0.2,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all animatable elements
+        document.querySelectorAll('.section-title, .section-subtitle, .story-chapter, .timeline-item, .timeline-final, .centerpiece-text, .goodbye-text, .archive-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Music Player
+        const musicPlayer = document.getElementById('musicPlayer');
+        const musicStatus = document.getElementById('musicStatus');
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        let isPlaying = false;
+
+        musicPlayer.addEventListener('click', () => {
+            if (!isPlaying) {
+                backgroundMusic.play().then(() => {
+                    isPlaying = true;
+                    musicStatus.textContent = '♫ Music on';
+                    musicPlayer.classList.add('playing');
+                }).catch(error => {
+                    console.log('Music file not found or cannot play');
+                });
+            } else {
+                backgroundMusic.pause();
+                isPlaying = false;
+                musicStatus.textContent = '♫ Music off';
+                musicPlayer.classList.remove('playing');
+            }
+        });
+
+        // Smooth scroll for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Prevent broken images from showing
+        document.querySelectorAll('img').forEach(img => {
+            img.addEventListener('error', function() {
+                this.style.display = 'none';
+                const placeholder = this.nextElementSibling;
+                if (placeholder && placeholder.classList.contains('hero-photo-placeholder')) {
+                    placeholder.style.display = 'flex';
+                }
+            });
+        });
+
+        // Add floating particles effect (subtle)
+        function createParticles() {
+            const particleCount = 20;
+            const container = document.body;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'fixed';
+                particle.style.width = '2px';
+                particle.style.height = '2px';
+                particle.style.background = 'rgba(242, 238, 231, 0.1)';
+                particle.style.borderRadius = '50%';
+                particle.style.pointerEvents = 'none';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animation = `float ${10 + Math.random() * 20}s ease-in-out infinite`;
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                particle.style.zIndex = '1';
+                container.appendChild(particle);
+            }
+        }
+
+        // Add CSS for particle animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes float {
+                0%, 100% {
+                    transform: translate(0, 0);
+                    opacity: 0;
+                }
+                10%, 90% {
+                    opacity: 0.3;
+                }
+                50% {
+                    transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px);
+                    opacity: 0.6;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize particles
+        createParticles();
+    </script>
+</body>
+</html>
